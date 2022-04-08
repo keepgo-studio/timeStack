@@ -9,29 +9,40 @@ if (isDevEnv) {
   } catch {}
 }
 
-let mainWindow;
+let timerWindow, dashboardWindow;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({
+  timerWindow = new BrowserWindow({
     width: 400,
     height: 700,
-    webPreferences: {
-      preload: path.join(__dirname, "scripts/preload.js"),
-    },
   });
 
+  dashboardWindow = new BrowserWindow({
+    width: 1200,
+    height: 740,
+    show: false
+  })
+
   if (isDevEnv) {
-    mainWindow.webContents.openDevTools();
+    timerWindow.webContents.openDevTools();
+    dashboardWindow.webContents.openDevTools();
   }
 
-  mainWindow.loadFile(path.join(__dirname, "pages/index.html"));
-  mainWindow.setAlwaysOnTop(true, 'screen');
-  mainWindow.setResizable(false);
+  timerWindow.loadURL(path.join(__dirname, 'pages/timer.html'))
+  dashboardWindow.loadURL(path.join(__dirname, 'pages/dashboard.html'))
+  
+  // mainWindow.setAlwaysOnTop(true, 'screen');
+  // mainWindow.setResizable(false);
 };
+
 
 app.whenReady().then(() => {
   createWindow();
 
+  // setTimeout(()=> {
+  //   dashboardWindow.show()
+  // }, 5000)
+  
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

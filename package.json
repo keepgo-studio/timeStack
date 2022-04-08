@@ -2,11 +2,11 @@
   "name": "timestack",
   "version": "1.0.0",
   "description": "timeStack electron application by iougou03",
-  "main": "src/main.js",
+  "main": "./src/main.js",
   "scripts": {
     "start": "npm run dev",
     "dev": "set NODE_ENV=development&&electron .",
-    "watch-tailwindcss": "npx tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch"
+    "watch-twcss": "npx tailwindcss -i ./src/frontend/public/styles.css -o ./src/frontend/public/styles-deploy.css --watch"
   },
   "keywords": [
     "electron",
