@@ -1,0 +1,9 @@
+<script>
+	const { ipcRenderer } = require("electron");
+	const router = require("./router");
+	ipcRenderer.on("connect-new-client", (event) => {
+		const [ port ] = event.ports;
+		
+		port.onmessage = (event) => { router(port, event) }
+	})
+</script>

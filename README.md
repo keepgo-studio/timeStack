@@ -28,3 +28,21 @@ Electron js + tailwindcss
         efficient structure is needed if the project is messy
 
     3. 
+
+
+## issues I got
+
+1. npm install sqlite3
+    
+    since npm told me that there are 3 secure vulnerabilities I checked by running 'npm audit', and get message below.
+
+```
+3 high severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+```
+
+I've found out that vscode teams had published node-sqlite for their project
+
+This works find for me , [issue link]('https://github.com/mapbox/node-sqlite3/issues/1493#issuecomment-980521241')

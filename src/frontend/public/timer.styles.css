@@ -1,0 +1,229 @@
+body{
+  height: 100%;
+}
+
+
+.timer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top:0;
+  left:0;
+  width: 100%;
+  z-index: 999;
+}
+
+.timer-nav__home-icon{
+  width: 60px;
+  height: 60px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.timer-nav__header__span{
+  padding: 5px 4rem;
+  background-color: #4C84FF;
+  border-radius: 999px;
+}
+
+.timer-nav__menu-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+}
+.timer-nav__menu-icon {
+  position: relative;
+  cursor: pointer;
+}
+.timer-nav__menu-icon span {
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+}
+.timer-nav__menu-icon::after,
+.timer-nav__menu-icon::before {
+  content: "";
+  width: 20px;
+  height: 2px;
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
+.timer-nav__menu-icon::after {
+  top:38%; 
+}
+.timer-nav__menu-icon::before {
+  top:62%; 
+}
+
+.menu-block {
+  position: absolute;
+  top:60px;
+  left:0;
+  width: 100%;
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  transition: ease transform 300ms;
+}
+.close{
+  transform: translateY(-100%);
+}
+.menu-block ul li {
+  padding: 0 1rem;
+  height: 50px;
+  font-size: .9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.menu-block__line {
+  width: 2px;
+  height: 50px;
+  background-color: #4C84FF;
+  position: absolute;
+  top:0;
+  left:-2px;
+}
+
+main {
+  height: calc(100% - 60px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.timer-block {
+  flex-grow: 1;
+  background-color: var(--light-inner-background);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+
+.pause-note {
+  background-color: var(--light-inner-background);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pause-note__time {
+  display: inline-block;
+  width: 100%;
+  color: var(--red);
+  font-weight: bold;
+}
+.pause-note svg {
+  width: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--dark-background);
+    color: var(--light-background);
+  }
+
+  .timer-nav {
+    background-color: var(--dark-inner-background);
+  }
+
+  .timer-nav__home-icon:hover {
+    background-color: #4C84FF;
+  }
+  .timer-nav__home-icon:hover svg {
+    fill: var(--light-background);
+  }
+
+  .timer-nav__menu-icon span,
+  .timer-nav__menu-icon::after,
+  .timer-nav__menu-icon::before {
+    background-color: var(--light-background);
+  }
+  .timer-nav__menu-icon:hover{
+    background-color: #4C84FF;
+  }
+
+  .menu-block {
+    color: var(--light-background);
+    background-color: rgba(0,0,0,0.4);
+  }
+  .menu-block ul li:hover {
+    background-color: rgba(0,0,0,0.6);
+  }
+
+
+  .timer-block {
+    background-color: var(--dark-inner-background);
+  }
+  
+  
+  .pause-note {
+    background-color: var(--dark-inner-background);
+  }
+  .pause-note svg {
+    fill: var(--light-background);
+  }
+}
+
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: var(--light-background);
+    color:var(--dark-background);
+  }
+
+  .timer-nav {
+    background-color: var(--light-inner-background);
+  }
+
+  .timer-nav__home-icon:hover {
+    background-color: #4C84FF;
+  }
+  .timer-nav__home-icon:hover svg {
+    fill: var(--dark-background);
+  }
+
+  .timer-nav__header__span {
+    color: var(--light-background)
+  }
+
+  .timer-nav__menu-icon span,
+  .timer-nav__menu-icon::after,
+  .timer-nav__menu-icon::before {
+    background-color: var(--dark-background);
+  }
+  .timer-nav__menu-icon:hover{
+    background-color: #4C84FF;
+  }
+  .timer-nav__menu-icon:hover span,
+  .timer-nav__menu-icon:hover::after,
+  .timer-nav__menu-icon:hover::before {
+    background-color: var(--light-background);
+  }
+
+  .menu-block {
+    color: var(--dark-background);
+    background-color: rgba(255,255,255,0.4);
+  }
+  .menu-block ul li:hover {
+    background-color: rgba(255,255,255,0.6);
+  }
+
+  .timer-block {
+    background-color: var(--light-inner-background);
+  }
+
+
+  .pause-note {
+    background-color: var(--light-inner-background);
+  }
+  .pause-note svg {
+    fill: var(--dark-background);
+  }
+}
