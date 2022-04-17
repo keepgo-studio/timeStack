@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 let workerChannel;
 
+// with main process
 contextBridge.exposeInMainWorld('darkMode', {
     init: () => ipcRenderer.invoke('dark-mode:init'),
     toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
@@ -14,17 +15,21 @@ contextBridge.exposeInMainWorld('alwaysOnTop', {
 contextBridge.exposeInMainWorld('openDashboard', {
     open: () => ipcRenderer.invoke('dashboard:open')
 })
-// ipcRenderer.send('request-worker-channel');
 
-// ipcRenderer.once('provide-worker-channel', (event)=> {
-//     console.log("timer process connected with worker process!");
+ipcRenderer.send('request-worker-channel');
 
-//     const [ port ] = event.ports;
-//     workerChannel = port;
+ipcRenderer.once('provide-worker-channel', (event)=> {
+    console.log("timer process connected with worker process!");
 
-//     port.onmessage = ({ data }) => {
-        
-//     }
-// });
+    const [ port ] = event.ports;
+    workerChannel = port;
+
+    port.onmessage = ({ data }) => { window.postMessage(data) }
+});
 
 window.onbeforeunload = (e) => { e.returnValue = false; }
+
+// with worker proces
+contextBridge.exposeInMainWorld('workerCall', {
+    saveStackNode: (msg) => workerChannel.postMessage(msg)
+})

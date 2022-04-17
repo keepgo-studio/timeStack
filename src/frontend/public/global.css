@@ -1,16 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
+.global__remove-drag{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 :root {
   --dark-background: #1E1E1E;
   --light-background: #F5F6FA;
   --light-inner-background: #fff;
   --dark-inner-background: #252526;
-  --red: #C60A1D;
+  --red: rgba(198,10,29,0.7);
+  --red2: rgb(198,10,29);
+  --white: #f5f6fa;
 }
 html {
   height: 100%;
@@ -20,5 +30,5 @@ ul, li {
 }
 
 body{
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
 }

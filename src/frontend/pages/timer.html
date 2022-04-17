@@ -10,6 +10,14 @@
     <title>Timer</title>
 </head>
 <body>
+    <header class="message-alert">
+        <div class="message-alert__box success">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" ><rect fill="none" height="24" width="24"/><path d="M22,5.18L10.59,16.6l-4.24-4.24l1.41-1.41l2.83,2.83l10-10L22,5.18z M19.79,10.22C19.92,10.79,20,11.39,20,12 c0,4.42-3.58,8-8,8s-8-3.58-8-8c0-4.42,3.58-8,8-8c1.58,0,3.04,0.46,4.28,1.25l1.44-1.44C16.1,2.67,14.13,2,12,2C6.48,2,2,6.48,2,12 c0,5.52,4.48,10,10,10s10-4.48,10-10c0-1.19-0.22-2.33-0.6-3.39L19.79,10.22z"/></svg>
+            <span></span>
+        </div>
+    </header>
+
     <nav class="timer-nav">
         <div class="timer-nav__home-icon">
             <?xml version="1.0" standalone="no"?>
@@ -59,26 +67,49 @@
     </div>
 
     <main>
-        <div class="timer-block">
-            <div class="timer-block__clock">Clock</div>
+        <section class="timer-block">
+            <article class="timer-block__clock"></article>
 
-            <div class="timer-block__timer">
-                <p></p>
-                <h1>
-                    <span class="hour">02</span>
-                    <span class="min">13</span>
-                </h1>
+            <article class="timer-block__timer">
+                <p class="timer-block__timer__current-time"></p>
+
+                <div class="timer-block__timer__hour-min">
+                    <h1 class="item">
+                        <span class="hour-text">00</span>
+                        <span >HOUR</span>
+                    </h1>
+                    <b>:</b>
+                    <h1 class="item">
+                        <span class="min-text">00</span>
+                        <span >MIN</span>
+                    </h1>
+                    <h3 class="sec">00</h3>
+                </div>
+            </article>
+
+            <ul class="timer-block__button-container">
+                <li id="start-pause" class="button-container_start-pause mode-start">
+                    <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.74988 1.16414L22.1796 12.9515C22.5181 13.1468 22.5118 13.6375 22.1684 13.824L1.7386 24.918C1.40544 25.0989 1 24.8577 1 24.4786V1.59722C1 1.21238 1.41654 0.971812 1.74988 1.16414Z" stroke-width="2"/>
+                    </svg>
+
+                    <svg width="15" height="22" viewBox="0 0 15 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="1" y1="1" x2="1" y2="21" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="14" y1="1" x2="14" y2="21"  stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </li>
+                <li id="stop" class="button-container_stop">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="1" width="20" height="20" rx="1" stroke="#F5F6FA" stroke-width="2"/>
+                    </svg>
+                </li>
+            </ul>
+        </section>
+
+        <section class="pause-note">
+            <div class="pause-note__time">
             </div>
-
-            <div class="timer-block__button-container">
-                <div class="start/pause">start</div>
-                <div class="stop">stop</div>
-            </div>
-        </div>
-
-        <div class="pause-note">
-            <span class="pause-note__time">cal</span>
-            <span class="pause-note__text">note</span>
+            <div class="pause-note__text">note</div>
             
             <?xml version="1.0" standalone="no"?>
             <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
@@ -104,9 +135,10 @@
             -4 897 68 39 51 39 133 0 184 -55 72 -2 68 -925 68 -726 -1 -834 -3 -873 -17z"/>
             </g>
             </svg>
-        </div>
+        </section>
 
     </main>
+
     <script src="../components/index.js" type="module"></script>
     <script src="../renderer/timer.renderer.js" type="module"></script>
 </body>

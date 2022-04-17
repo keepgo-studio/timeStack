@@ -11,10 +11,10 @@ const path = require("path");
 const isDevEnv = process.env.NODE_ENV === "development";
 
 if (isDevEnv) {
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname,'../node_modules', '.bin', 'electron'),
-    hardResetMethod: 'exit'
-  });
+  // require('electron-reload')(__dirname, {
+  //   electron: path.join(__dirname,'../node_modules', '.bin', 'electron'),
+  //   hardResetMethod: 'exit'
+  // });
 }
 
 let timerWindow = null;
@@ -30,8 +30,8 @@ const closeAllWindow = () => {
 const createWindow = () => {
   
   timerWindow = new BrowserWindow({
-    width: 360,
-    height: 700,
+    width: 380,
+    height: 760,
     webPreferences: {
       preload: path.join(__dirname, "frontend/preload/timer.preload.js"),
       // nodeIntegration: true,
@@ -59,10 +59,10 @@ const createWindow = () => {
     },
   });
   worker.loadURL(path.join(__dirname, "backend/worker.html"));
-  worker.webContents.openDevTools();
+  worker.webContents.openDevTools({ mode: "detach" });
 
   if (isDevEnv) {
-    // timerWindow.webContents.openDevTools({ mode:"detach" });
+    timerWindow.webContents.openDevTools({ mode:"detach" });
     dashboardWindow.webContents.openDevTools();
   }
 
@@ -135,6 +135,7 @@ const handleRendererEvents = () => {
       event.senderFrame.postMessage('provide-worker-channel', null, [port2]);
     }
   });
+
 };
 
 app.whenReady().then(() => {

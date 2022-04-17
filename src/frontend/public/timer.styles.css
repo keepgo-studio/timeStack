@@ -1,20 +1,61 @@
-body{
+body {
   height: 100%;
 }
 
+
+.message-alert {
+  position: fixed;
+  top:80px;
+  left:0;
+  width: 100%;
+  z-index: 997;
+}
+.message-alert .show {
+  opacity: 1;
+}
+
+.message-alert__box {
+  padding: 1.5rem 1rem;
+  transition: ease 600ms all;
+  margin:0 1rem;
+  border-radius: 10px;
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  opacity: 0;
+}
+.message-alert__box span{
+  margin-left: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+.message-alert__box svg:nth-child(1){
+  fill: var(--red);
+}
+.message-alert__box svg:nth-child(2){
+  fill: #4c84ff;
+}
+.message-alert .success svg:nth-child(1){
+  display: none;
+}
+.message-alert .failed svg:nth-child(2) {
+  display: none;
+}
 
 .timer-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   width: 100%;
   z-index: 999;
 }
 
-.timer-nav__home-icon{
+.timer-nav__home-icon {
   width: 60px;
   height: 60px;
   padding: 1rem;
@@ -22,9 +63,9 @@ body{
   cursor: pointer;
 }
 
-.timer-nav__header__span{
+.timer-nav__header__span {
   padding: 5px 4rem;
-  background-color: #4C84FF;
+  background-color: #4c84ff;
   border-radius: 999px;
 }
 
@@ -50,33 +91,33 @@ body{
   width: 20px;
   height: 2px;
   position: absolute;
-  top:50%;
-  left:50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 .timer-nav__menu-icon::after {
-  top:38%; 
+  top: 38%;
 }
 .timer-nav__menu-icon::before {
-  top:62%; 
+  top: 62%;
 }
 
 .menu-block {
   position: absolute;
-  top:60px;
-  left:0;
+  top: 60px;
+  left: 0;
   width: 100%;
-  backdrop-filter: blur(2px);
-  z-index: 10;
+  backdrop-filter: blur(4px);
+  z-index: 998;
   transition: ease transform 300ms;
 }
-.close{
+.close {
   transform: translateY(-100%);
 }
 .menu-block ul li {
   padding: 0 1rem;
   height: 50px;
-  font-size: .9rem;
+  font-size: 0.9rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,10 +126,10 @@ body{
 .menu-block__line {
   width: 2px;
   height: 50px;
-  background-color: #4C84FF;
+  background-color: #4c84ff;
   position: absolute;
-  top:0;
-  left:-2px;
+  top: 0;
+  left: -2px;
 }
 
 main {
@@ -102,8 +143,112 @@ main {
   background-color: var(--light-inner-background);
   border-radius: 10px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 }
 
+.timer-block__timer {
+  position: relative;
+  color: #4c84ff;
+  margin-bottom: 2rem;
+}
+.timer-block__timer__current-time {
+  width: 100%;
+  font-weight: bold;
+  font-size: .9rem;  
+}
+.timer-block__timer__current-time > span {
+  color: var(--red2);
+}
+.timer-block__timer__hour-min {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+.timer-block__timer__hour-min > b {
+  font-size: 2rem;
+}
+.timer-block__timer__hour-min .item {
+  position: relative;
+  margin: 0 6px;
+}
+.timer-block__timer__hour-min span:nth-child(1) {
+  font-size: 4.5rem;
+}
+.timer-block__timer__hour-min span:nth-child(2) {
+  position: absolute;
+  font-size: 0.9rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(70%);
+}
+.timer-block__timer__hour-min .sec {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateX(100%);
+}
+
+/* timer-block__button-container */
+.timer-block__button-container {
+  display: flex;
+}
+.timer-block__button-container li {
+  margin: 0 0.5rem;
+}
+.button-container_start-pause,
+.button-container_stop {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+.button-container_start-pause:active {
+  background-color: #4c84ff;
+}
+.button-container_start-pause:active svg {
+  stroke: #f5f6fa;
+}
+.button-container_stop:active {
+  background-color: var(--red2);
+}
+.button-container_stop {
+  background-color: var(--red);
+}
+.button-container_start-pause svg,
+.button-container_stop svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.button-container_start-pause svg {
+  stroke: #4c84ff;
+}
+.mode-start svg {
+  left: 55%;
+}
+.mode-start svg:nth-child(2) {
+  display: none;
+}
+.mode-pause {
+  background-color: #4c84ff;
+}
+.mode-pause:active {
+  background-color: #3374ff;
+}
+.mode-pause svg {
+  stroke: #f5f6fa;
+}
+.mode-pause svg:nth-child(1) {
+  display: none;
+}
+/* timer-block__button-container */
 
 .pause-note {
   background-color: var(--light-inner-background);
@@ -129,12 +274,18 @@ main {
     color: var(--light-background);
   }
 
+
+  .message-alert__box {
+    background-color: rgba(14, 14, 14, 0.5);
+  }
+
+
   .timer-nav {
     background-color: var(--dark-inner-background);
   }
 
   .timer-nav__home-icon:hover {
-    background-color: #4C84FF;
+    background-color: #4c84ff;
   }
   .timer-nav__home-icon:hover svg {
     fill: var(--light-background);
@@ -145,24 +296,26 @@ main {
   .timer-nav__menu-icon::before {
     background-color: var(--light-background);
   }
-  .timer-nav__menu-icon:hover{
-    background-color: #4C84FF;
+  .timer-nav__menu-icon:hover {
+    background-color: #4c84ff;
   }
 
   .menu-block {
     color: var(--light-background);
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
   }
   .menu-block ul li:hover {
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
   }
-
 
   .timer-block {
     background-color: var(--dark-inner-background);
   }
-  
-  
+
+  .mode-start {
+    background-color: var(--dark-background);
+  }
+
   .pause-note {
     background-color: var(--dark-inner-background);
   }
@@ -171,26 +324,30 @@ main {
   }
 }
 
-
 @media (prefers-color-scheme: light) {
   body {
     background-color: var(--light-background);
-    color:var(--dark-background);
+    color: var(--dark-background);
   }
+
+  .message-alert__box {
+    background-color: rgba(196, 196, 196, 0.4);
+  }
+
 
   .timer-nav {
     background-color: var(--light-inner-background);
   }
 
   .timer-nav__home-icon:hover {
-    background-color: #4C84FF;
+    background-color: #4c84ff;
   }
   .timer-nav__home-icon:hover svg {
     fill: var(--dark-background);
   }
 
   .timer-nav__header__span {
-    color: var(--light-background)
+    color: var(--light-background);
   }
 
   .timer-nav__menu-icon span,
@@ -198,8 +355,8 @@ main {
   .timer-nav__menu-icon::before {
     background-color: var(--dark-background);
   }
-  .timer-nav__menu-icon:hover{
-    background-color: #4C84FF;
+  .timer-nav__menu-icon:hover {
+    background-color: #4c84ff;
   }
   .timer-nav__menu-icon:hover span,
   .timer-nav__menu-icon:hover::after,
@@ -209,16 +366,19 @@ main {
 
   .menu-block {
     color: var(--dark-background);
-    background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
   }
   .menu-block ul li:hover {
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
   }
 
   .timer-block {
     background-color: var(--light-inner-background);
   }
 
+  .mode-start {
+    background-color: var(--light-background);
+  }
 
   .pause-note {
     background-color: var(--light-inner-background);

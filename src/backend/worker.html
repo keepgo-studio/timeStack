@@ -1,9 +1,30 @@
 <script>
-	const { ipcRenderer } = require("electron");
-	const router = require("./router");
+	console.log("worker process is on")
+
+	var { ipcRenderer } = require("electron");
+	var router = require("./router");
+	var { IPCMessage } = require("./class/IPCMessage");
+	var { getCurrentDateTime } = require("./controller");
+
+	let currentDate = new Date();
 	ipcRenderer.on("connect-new-client", (event) => {
+		console.log("worker process connected with renderer process")
 		const [ port ] = event.ports;
 		
 		port.onmessage = (event) => { router(port, event) }
+
+		// set event for date tracking
+		const timerId = setInterval(() => {
+			let d = new Date();
+
+			if (currentDate.getMinutes() != d.getMinutes()) {
+				const msg = new IPCMessage("min-changed", {})
+
+				port.postMessage(msg.getMessage());
+
+				currentDate = d;
+			}
+			
+		}, 1000);
 	})
 </script>
