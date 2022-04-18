@@ -1,4 +1,5 @@
 import IPCMessage from "../class/IPCMessage.js";
+import "../components/index.js"
 
 function handleClickAlwaysOnTopButton(buttonElem) {
   const buttonAOT = document.getElementById("always-on-top");
@@ -30,6 +31,16 @@ async function handleClickDarkButton(buttonElem) {
   });
 }
 
+function handleClickSettingButton(buttonElem) {
+  buttonElem.addEventListener("click", () => {
+    window.open("../pages/settings.html", {
+      width: 700,
+      height: 500,
+      resizable: false
+    })
+  })
+}
+
 function initMenuButton() {
   const menuIcon = document.querySelector(".timer-nav__menu-icon");
   const menuDiv = document.querySelector(".menu-block");
@@ -51,6 +62,7 @@ function initMenuButton() {
       case 0:
         break;
       case 1:
+        handleClickSettingButton(liElem)
         break;
       case 2:
         handleClickAlwaysOnTopButton(liElem);
@@ -266,4 +278,8 @@ function drawAlertMessage(isSuccess, errorMessage) {
   initTimerButtons();
 
   drawCurrentTime();
+
+  document.getElementsByTagName("ts-dialog").onclose = ({ detail }) => {
+    console.log(detail)
+  }
 })();

@@ -1,0 +1,12 @@
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--dark-background);
+  }
+}
+
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: var(--light-background);
+  }
+}

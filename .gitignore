@@ -3,3 +3,5 @@ node_modules
 .vscode
 
 src/frontend/public/imgs
+
+dist
