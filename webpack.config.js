@@ -33,7 +33,27 @@ module.exports = [
   Object.assign({}, common_config, {
     target: 'electron-renderer',
     entry: {
-      index : './src/frontend/renderer/timer.renderer.js'
+      "timer" : './src/frontend/renderer/timer.renderer.js'
+    },
+    output: {
+      filename: "[name]-bundle.js",
+      path: path.resolve(__dirname, "dist")
+    }
+  }),
+  Object.assign({}, common_config, {
+    target: 'electron-renderer',
+    entry: {
+      "dashboard" : './src/frontend/renderer/dashboard.renderer.js'
+    },
+    output: {
+      filename: "[name]-bundle.js",
+      path: path.resolve(__dirname, "dist")
+    }
+  }),
+  Object.assign({}, common_config, {
+    target: 'node',
+    entry: {
+      "memo-editor" : './src/frontend/renderer/memo-editor.renderer.js'
     },
     output: {
       filename: "[name]-bundle.js",

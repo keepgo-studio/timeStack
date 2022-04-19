@@ -4,10 +4,6 @@ import "../components/index.js"
 function handleClickAlwaysOnTopButton(buttonElem) {
   const buttonAOT = document.getElementById("always-on-top");
 
-  buttonAOT.onchange = ({ detail }) => {
-    window.alwaysOnTop.toggle();
-  };
-
   buttonElem.addEventListener("click", async () => {
     const status = await window.alwaysOnTop.toggle();
     buttonAOT.setAttribute("checked", status);
@@ -20,10 +16,6 @@ async function handleClickDarkButton(buttonElem) {
   const isDark = await window.darkMode.init();
 
   if (isDark) buttonDM.setAttribute("checked", true);
-
-  buttonDM.onchange = ({ detail }) => {
-    window.darkMode.toggle();
-  };
 
   buttonElem.addEventListener("click", async () => {
     const status = await window.darkMode.toggle();
@@ -142,24 +134,25 @@ function timerOperator(command) {
       timerState["pause"] = false;
       timerState["stop"] = true;
 
-      const msg = new IPCMessage("save-stack-node", {
-        startDateTime: startDate,
-        endDateTime: new Date(),
-        totalTime: `${hour}/${min}`
-      });
-
       if (startDate) {
-        window.workerCall.saveStackNode(msg);
+        const msg = new IPCMessage("save-stack-node", {
+          startDateTime: startDate,
+          endDateTime: new Date(),
+          totalTime: `${hour}/${min}`
+        });
+
+        drawDialog(msg, { hour, min });
         startDate = null;
+
+        drawCurrentTime();
+  
+        clearInterval(timerId);
+        hour = 0;
+        min = 0;
+        sec = 0;
+        drawTimerText(hour, min, sec);
       }
 
-      drawCurrentTime();
-
-      clearInterval(timerId);
-      hour = 0;
-      min = 0;
-      sec = 0;
-      drawTimerText(hour, min, sec);
       break;
   }
 }
@@ -188,7 +181,8 @@ function initTimerButtons() {
   const startElem = document.getElementById("start-pause");
   const stopElem = document.getElementById("stop");
 
-  startElem.addEventListener("mouseup", () => {
+  startElem.addEventListener("mouseup", (e) => {
+    e.stopPropagation();
     if (startElem.classList.contains("mode-start")) {
       timerOperator("start");
       startElem.classList.remove("mode-start");
@@ -197,19 +191,16 @@ function initTimerButtons() {
       timerOperator("pause");
       startElem.classList.add("mode-start");
       startElem.classList.remove("mode-pause");
-
-      // save pause note
     }
   });
 
-  stopElem.addEventListener("mouseup", () => {
+  stopElem.addEventListener("mouseup", (e) => {
+    e.stopPropagation();
     timerOperator("stop");
 
     if (startElem.classList.contains("mode-pause")) {
       startElem.classList.add("mode-start");
       startElem.classList.remove("mode-pause");
-
-      // send data to worker process
     }
   });
 }
@@ -246,9 +237,9 @@ function drawCurrentTime() {
       : "0" + d.getMinutes().toString();
 
   if (timerState["start"] && startDate === null)
-    dateElem.innerHTML = `<span>START AT</span> ${hours} : ${mins}`;
+    dateElem.innerHTML = `<span>START AT</span> ${hours} <b>:</b> ${mins}`;
   else if (timerState["stop"])
-    dateElem.innerHTML = `CURRENT ${hours} : ${mins}`;
+    dateElem.innerHTML = `CURRENT ${hours} <b>:</b> ${mins}`;
   else return;
 }
 
@@ -271,6 +262,26 @@ function drawAlertMessage(isSuccess, errorMessage) {
   }, 3000);
 }
 
+function drawDialog(msg, { hour, min }) {
+  const customDialog = document.createElement('ts-dialog');
+
+  customDialog.setAttribute('hour', hour.toString());
+  customDialog.setAttribute('minutes', min.toString())
+  customDialog.setAttribute('type', "작업");
+
+  customDialog.addEventListener('should-save', ({ detail }) => {
+    if (detail.shouldSave){
+      window.workerCall.saveStackNode(msg);
+    }
+  })
+
+  document.body.appendChild(customDialog);
+}
+
+function switchElementAnimation() {
+
+}
+
 (() => {
   initHandleWorkerMessage();
   initMenuButton();
@@ -278,8 +289,4 @@ function drawAlertMessage(isSuccess, errorMessage) {
   initTimerButtons();
 
   drawCurrentTime();
-
-  document.getElementsByTagName("ts-dialog").onclose = ({ detail }) => {
-    console.log(detail)
-  }
 })();

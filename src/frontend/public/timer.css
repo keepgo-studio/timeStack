@@ -1,7 +1,7 @@
 body {
   height: 100%;
+  overflow: hidden;
 }
-
 
 .message-alert {
   position: fixed;
@@ -133,10 +133,15 @@ body {
 }
 
 main {
+  position: absolute;
+  top:60px;
+  left:0;
   height: calc(100% - 60px);
+  width: 100%;
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  transition: ease 500ms transform;
 }
 .timer-block {
   flex-grow: 1;
@@ -162,6 +167,13 @@ main {
 }
 .timer-block__timer__current-time > span {
   color: var(--red2);
+}
+.timer-block__timer__current-time > b {
+  animation: blink linear infinite 1s;
+}
+@keyframes blink {
+  0% { opacity: 0; }
+  100% { opacity: 1;}
 }
 .timer-block__timer__hour-min {
   display: flex;

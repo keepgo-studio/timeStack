@@ -7,17 +7,37 @@ export default class Dialog extends HTMLElement {
     
     this.attachShadow({ mode : "open" })
 
-    this.hour = this.getAttribute('hour') || 1;
-    this.minutes = this.getAttribute('minutes') || 12;
-    this.type = this.getAttribute('type') || "작업";
+    this.hour = this.getAttribute('hour');
+    this.minutes = this.getAttribute('minutes');
+    this.type = this.getAttribute('type');
   }
 
   connectedCallback() {
     this.render();
 
-    this.shadowRoot.querySelector("button").addEventListener("click", () => {
-      this.remove();
-    })
+    this.shadowRoot.getElementById("save").addEventListener("click", this.handleSubmitEvent.bind(this));
+    this.shadowRoot.getElementById("remove").addEventListener("click", this.handleSubmitEvent.bind(this));
+  }
+  
+  disconnectedCallback() {
+    console.log("dialog closed")
+    this.shadowRoot.getElementById("save").removeEventListener("click", this.handleSubmitEvent);
+    this.shadowRoot.getElementById("remove").removeEventListener("click", this.handleSubmitEvent);
+  }
+  
+  handleSubmitEvent(e) {
+    e.stopPropagation();
+    
+    let shouldSave;
+    if (e.currentTarget.id === "save") shouldSave = true
+    else shouldSave = false;
+
+    console.log(shouldSave)
+    this.dispatchEvent(new CustomEvent('should-save', {
+      detail: { shouldSave },
+    }));
+
+    this.remove();
   }
 
   render() {
@@ -34,19 +54,24 @@ export default class Dialog extends HTMLElement {
             <p>총</p>
             <h1>${this.hour}시간 ${this.minutes}분</h1>
             <p><b>${this.type}</b>하셨습니다</p>
-            <p>바로 저장할까요?</p>
+            <p>저장할까요?</p>
           </div>
 
           <div class="button-block">
-            <button>저장</button>
-            <button>삭제</button>
+            <button id="save">저장</button>
+            <button id="remove">삭제</button>
           </div>
         </main>
       </section>
     `
   }
 
-  disconnectedCallback() {
-    console.log("Asasd")
+  static get observedAttributes() {
+    return ['hour', 'minutes', 'type']
+  }
+
+  attributeChangedCallback(attName, oldValue, newValue) {
+    
+    this[attName] = newValue;
   }
 }
