@@ -21,6 +21,7 @@
   --red: rgba(198,10,29,0.7);
   --red2: rgb(198,10,29);
   --white: #f5f6fa;
+  --black: rgb(30, 30, 30);
 }
 html {
   height: 100%;

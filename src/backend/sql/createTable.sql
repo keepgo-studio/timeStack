@@ -17,9 +17,10 @@ CREATE TABLE stack_node(
     FOREIGN KEY(memo_of_period) REFERENCES memo(id)
 );
 
+DROP TABLE memo;
 CREATE TABLE memo(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tui_file BLOB -- required
+    editor_js_blocks BLOB -- required
 );
 
 CREATE TABLE time_type(
@@ -35,3 +36,6 @@ CREATE TABLE pause_node(
     stack_node_id INT,
     FOREIGN KEY(stack_node_id) REFERENCES stack_node(id)
 );
+
+SELECT * from memo;
+SELECT * FROM stack_node as sn INNER JOIN memo as m ON m.id=sn.memo_of_period;

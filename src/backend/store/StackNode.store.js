@@ -1,7 +1,0 @@
-class StackNode {
-  constructor(
-    
-  ) {
-
-  }
-}

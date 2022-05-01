@@ -31,5 +31,6 @@ window.onbeforeunload = (e) => { e.returnValue = false; }
 
 // with worker proces
 contextBridge.exposeInMainWorld('workerCall', {
-    saveStackNode: (msg) => workerChannel.postMessage(msg)
+    saveStackNode: (msg) => workerChannel.postMessage(msg),
+    saveMemoToStackNode: (msg) => workerChannel.postMessage(msg)
 })

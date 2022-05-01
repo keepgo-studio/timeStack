@@ -82,75 +82,78 @@ function initHomeButton() {
   });
 }
 
-let hour = 0;
-let min = 0;
-let sec = 0;
-let timerId;
-let timerState = {
+let global_hour = 0;
+let global_min = 0;
+let global_sec = 0;
+let global_timerId;
+let global_timerState = {
   start: false,
   pause: false,
   stop: true,
 };
-let startDate = null;
+let global_startDate = null;
+let global_msg = null;
 
 function timerOperator(command) {
   const go = () => {
-    sec++;
+    global_sec++;
 
-    if (sec >= 60) {
-      sec = 0;
-      min++;
+    if (global_sec >= 60) {
+      global_sec = 0;
+      global_min++;
     }
 
-    if (min >= 60) {
-      min = 0;
-      hour++;
+    if (global_min >= 60) {
+      global_min = 0;
+      global_hour++;
     }
-    drawTimerText(hour, min, sec);
+    drawTimerText(global_hour, global_min, global_sec);
   };
 
   switch (command) {
     case "start":
-      timerState["start"] = true;
-      timerState["pause"] = false;
-      timerState["stop"] = false;
+      global_timerState["start"] = true;
+      global_timerState["pause"] = false;
+      global_timerState["stop"] = false;
 
       drawCurrentTime();
-      startDate = new Date();
+      global_startDate = new Date();
 
-      timerId = setInterval(go, 1000);
+      global_timerId = setInterval(go, 1000);
       break;
 
     case "pause":
-      timerState["start"] = false;
-      timerState["pause"] = true;
-      timerState["stop"] = false;
+      global_timerState["start"] = false;
+      global_timerState["pause"] = true;
+      global_timerState["stop"] = false;
 
-      clearInterval(timerId);
+      clearInterval(global_timerId);
       break;
 
     case "stop":
-      timerState["start"] = false;
-      timerState["pause"] = false;
-      timerState["stop"] = true;
+      global_timerState["start"] = false;
+      global_timerState["pause"] = false;
+      global_timerState["stop"] = true;
 
-      if (startDate) {
-        const msg = new IPCMessage("save-stack-node", {
-          startDateTime: startDate,
+      if (global_startDate) {
+        global_msg = new IPCMessage("save-stack-node", {
+          startDateTime: global_startDate,
           endDateTime: new Date(),
-          totalTime: `${hour}/${min}`
+          totalTime: `${global_hour}/${global_min}`
         });
 
-        drawDialog(msg, { hour, min });
-        startDate = null;
+        swtichContentsFocus();
+        drawEditorHeader();
 
-        drawCurrentTime();
+        global_startDate = null;
+
+        drawCurrentTime(global_hour, global_min);
   
-        clearInterval(timerId);
-        hour = 0;
-        min = 0;
-        sec = 0;
-        drawTimerText(hour, min, sec);
+        clearInterval(global_timerId);
+        global_hour = 0;
+        global_min = 0;
+        global_sec = 0;
+        drawTimerText(global_hour, global_min, global_sec);
       }
 
       break;
@@ -207,17 +210,38 @@ function initTimerButtons() {
 
 function initTimerPauseNote() {}
 
+let global_isLoading = true;
+
 function initHandleWorkerMessage() {
   window.addEventListener("message", ({ data }) => {
+    let msg;
+
     switch (data.channel) {
-      case "min-changed":
+      case "worker--min-changed":
         drawCurrentTime();
         break;
-      case "worker-success":
+      case "worker--success":
+        global_isLoading = false;
         drawAlertMessage(true, data.jsonData.message);
         break;
-      case "worker-failed":
+      case "worker--failed":
+        global_isLoading = false;
         drawAlertMessage(false, data.jsonData.message);
+        break;
+
+      case "memo-editor--save":
+        msg = new IPCMessage("save-memo-to-stack-node", {
+          editor_js_blocks: JSON.stringify(data.editorJson),
+          stack_node: global_msg.getJsonData()
+        });
+        
+        window.workerCall.saveMemoToStackNode(msg);
+        resetEditor();
+        break;
+      
+      case "memo-editor--unsave":
+        window.workerCall.saveStackNode(globla_msg);
+        resetEditor();
         break;
     }
   });
@@ -236,9 +260,9 @@ function drawCurrentTime() {
       ? d.getMinutes().toString()
       : "0" + d.getMinutes().toString();
 
-  if (timerState["start"] && startDate === null)
+  if (global_timerState["start"] && global_startDate === null)
     dateElem.innerHTML = `<span>START AT</span> ${hours} <b>:</b> ${mins}`;
-  else if (timerState["stop"])
+  else if (global_timerState["stop"])
     dateElem.innerHTML = `CURRENT ${hours} <b>:</b> ${mins}`;
   else return;
 }
@@ -262,31 +286,77 @@ function drawAlertMessage(isSuccess, errorMessage) {
   }, 3000);
 }
 
-function drawDialog(msg, { hour, min }) {
+function drawEditorHeader() {
+  document.querySelector(".editor__header-container > h3").textContent = `${global_hour}시간 ${global_min}분 동안 한 일들`
+}
+
+function drawDialog() {
   const customDialog = document.createElement('ts-dialog');
 
-  customDialog.setAttribute('hour', hour.toString());
-  customDialog.setAttribute('minutes', min.toString())
+  customDialog.setAttribute('hour', global_hour.toString());
+  customDialog.setAttribute('minutes', global_min.toString())
   customDialog.setAttribute('type', "작업");
 
   customDialog.addEventListener('should-save', ({ detail }) => {
-    if (detail.shouldSave){
-      window.workerCall.saveStackNode(msg);
+    if (detail.shouldSave){ 
+      document.querySelector("iframe").contentWindow.postMessage({call: 'shouldSave', value: true});
     }
+    
+    swtichContentsFocus();
   })
 
   document.body.appendChild(customDialog);
 }
 
-function switchElementAnimation() {
+function initEditorButtons() {
+  document.querySelector(".editor__buttons-container button:nth-child(1)").addEventListener("click", () => {
+    drawDialog();
+  })
 
+  document.querySelector(".editor__buttons-container button:nth-child(2)").addEventListener("click", () => {
+    swtichContentsFocus();
+  })
 }
 
+function swtichContentsFocus() {
+  const timer = document.querySelector(".timer");
+  const editor = document.querySelector(".editor");
+
+  if(timer.classList.contains("focus")){
+    timer.classList.remove("focus");
+
+    setTimeout(()=>{
+      timer.style.left = "100%";
+      
+      setTimeout(()=>{
+        editor.classList.add("focus");
+      },300);
+
+    },300);
+    
+  } else {
+    editor.classList.remove("focus");
+
+    setTimeout(()=>{
+      timer.style.left = "0";
+      
+      setTimeout(()=>{
+        timer.classList.add("focus");
+      },300);
+
+    },300);
+  }
+}
+
+function resetEditor() {
+  document.querySelector("iframe").contentWindow.location.reload()
+}
 (() => {
   initHandleWorkerMessage();
   initMenuButton();
   initHomeButton();
   initTimerButtons();
+  initEditorButtons();
 
   drawCurrentTime();
 })();

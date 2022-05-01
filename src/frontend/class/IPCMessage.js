@@ -11,8 +11,10 @@ class IPCMessage {
     }
   }
 
+  getChannel() { return this.channel}
   setChannel(channel) { this.channel = channel}
   
+  getJsonData() { return this.jsonData }
   setJsonData(jsonData) { this.jsonData = jsonData }
 }
 

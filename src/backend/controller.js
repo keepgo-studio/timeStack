@@ -9,9 +9,9 @@ function postAlertMessage(port, status, message) {
   const msg = new IPCMessage();
 
   if (status) {
-    msg.setChannel('worker-success')
+    msg.setChannel('worker--success')
   } else {
-    msg.setChannel('worker-failed')
+    msg.setChannel('worker--failed')
   }
   msg.setJsonData({ message });
 
@@ -26,6 +26,7 @@ async function saveStackNode(
   start_time,
   end_time,
   totalTime,
+  memo_of_period
 ) {
   const sql = `
     INSERT INTO stack_node(
@@ -35,7 +36,8 @@ async function saveStackNode(
       end_date,
       start_time,
       end_time,
-      total_time
+      total_time,
+      ${memo_of_period ? "memo_of_period": ""}
       ) VALUES(
       ${year},
       ${month + 1},
@@ -43,7 +45,8 @@ async function saveStackNode(
       ${end_date},
       '${start_time}',
       '${end_time}',
-      '${totalTime}'
+      '${totalTime}',
+      ${memo_of_period || ""}
     );
   `.replace(/\s+/g," ")
 
@@ -51,7 +54,7 @@ async function saveStackNode(
   return new Promise((resolve, reject) => {
     db.run(sql, err => {
       if (err) {
-        console.log("error")
+        console.log("error", err)
         
         reject({
           status: false,
@@ -69,8 +72,43 @@ async function saveStackNode(
     })
   })
 }
+async function saveMemo(
+  data
+) {
+  const sql = `
+    INSERT INTO memo(
+      editor_js_blocks
+      ) VALUES(
+      '${data}'
+    );
+  `.replace(/\s+/g," ")
+
+
+  return new Promise((resolve, reject) => {
+    db.run(sql, function (err){
+      if (err) {
+        console.log("error", err)
+        
+        reject({
+          status: false,
+          message: "데이터를 넣는데 실패하였습니다."
+        });
+      } else {
+        console.log("success")
+        db.serialize();
+
+        resolve({
+          status: true,
+          message: "데이터를 넣는데 성공하였습니다.",
+          id: this.lastID
+        });
+      }
+    })
+  })
+}
 
 module.exports = {
   postAlertMessage,
-  saveStackNode
+  saveStackNode,
+  saveMemo
 }

@@ -6,6 +6,7 @@ class SystemSettingStore extends Store {
 
         this.darkTheme = this.get('darkTheme');
         this.alwaysOnTop = this.get('alwaysOnTop');
+        this.limitMinimumTime
     }
 
     getDarkTheme () {
